@@ -1194,43 +1194,214 @@
   }
 
   /* ==============================
-     RESPONSIVE (BASIC)
+     RESPONSIVE — TABLET (≤ 1024px)
   ============================== */
   @media (max-width: 1024px) {
-    nav { padding: 20px 32px; }
-    nav.scrolled { padding: 14px 32px; }
+    /* Nav */
+    nav { padding: 18px 28px; }
+    nav.scrolled { padding: 14px 28px; }
     .nav-links { display: none; }
-    #hero { grid-template-columns: 1fr; }
-    .hero-right { display: none; }
-    .hero-left { padding: 0 40px 72px; justify-content: flex-end; min-height: 100vh; }
+
+    /* Hero — keep image as bg, stack content */
+    #hero {
+      grid-template-columns: 1fr;
+      position: relative;
+    }
+    .hero-right {
+      display: block;
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+    .hero-right::before {
+      background: linear-gradient(to bottom, rgba(15,35,24,.5) 0%, transparent 40%);
+    }
+    .hero-right::after {
+      background: linear-gradient(to top, var(--green-deep) 0%, rgba(15,35,24,.7) 50%, transparent 100%);
+    }
+    .hero-left {
+      position: relative;
+      z-index: 3;
+      padding: 0 36px 72px;
+      min-height: 100vh;
+      justify-content: flex-end;
+    }
+    .hero-badge { right: 28px; bottom: 72px; }
+    .hero-vertical { display: none; }
+
+    /* Manifesto */
     #manifesto { grid-template-columns: 1fr; }
-    .manifesto-visual { height: 400px; }
-    .manifesto-content { padding: 64px 40px; }
-    .impact-header { flex-direction: column; gap: 20px; }
-    .impact-desc { text-align: left; }
+    .manifesto-visual { height: 360px; }
+    .manifesto-visual-overlay { background: linear-gradient(to bottom, transparent 60%, var(--green-dark) 100%); }
+    .manifesto-content { padding: 56px 36px 72px; }
+    .manifesto-quote-mark { font-size: 80px; }
+
+    /* Impact */
+    #impact { padding: 88px 0 72px; }
+    .impact-inner { padding: 0 36px; }
+    .impact-header { flex-direction: column; gap: 16px; margin-bottom: 60px; }
+    .impact-desc { text-align: left; max-width: 100%; }
     .impact-stats { grid-template-columns: repeat(2,1fr); }
-    .how-steps { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .stat-item { padding: 32px 28px; }
+    .impact-quote { padding: 48px 36px; margin-top: 48px; }
+
+    /* How */
+    #how { padding: 88px 36px; }
+    .how-steps { grid-template-columns: 1fr 1fr; gap: 36px; }
     .how-steps::before { display: none; }
-    .step-item:nth-child(even) { margin-top: 0; }
+    .step-item { padding: 0; }
+    .step-item:nth-child(2),
+    .step-item:nth-child(4) { margin-top: 0; }
+
+    /* Community */
     #community { grid-template-columns: 1fr; }
-    .community-visual { height: 480px; }
+    .community-content { padding: 72px 36px; }
+    .community-visual { height: 400px; order: -1; }
+    .community-visual-tag { left: 0; }
+
+    /* Revenue */
+    #revenue { padding: 88px 36px; }
     .revenue-inner { grid-template-columns: 1fr; gap: 48px; }
-    .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
-    .gallery-item.tall { grid-row: span 1; height: 300px; }
-    .gallery-item { height: 240px; }
+
+    /* Gallery */
+    #gallery { padding-top: 72px; }
+    .gallery-header { padding: 0 36px; margin-bottom: 40px; }
+    .gallery-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+    }
+    .gallery-item { height: 220px; }
+    .gallery-item.tall { grid-row: span 1; height: 220px; }
+
+    /* Trust */
+    #trust { padding: 88px 36px; }
     .trust-inner { grid-template-columns: 1fr; gap: 48px; }
-    footer { flex-direction: column; text-align: center; }
-    .footer-links { justify-content: center; }
-    .cta-contact-info { gap: 28px; }
-    #impact { padding: 100px 0 80px; }
-    .impact-inner { padding: 0 40px; }
-    #how { padding: 100px 40px; }
-    #trust { padding: 100px 40px; }
-    #gallery { padding-top: 80px; }
-    .gallery-header { padding: 0 40px; }
-    #revenue { padding: 100px 40px; }
-    footer { padding: 32px 40px; }
-    #cta { padding: 100px 40px; }
+
+    /* CTA */
+    #cta { padding: 100px 36px; min-height: 90vh; }
+    .cta-contact-info { gap: 24px; flex-direction: column; align-items: center; }
+
+    /* Footer */
+    footer { padding: 28px 36px; flex-direction: column; text-align: center; gap: 16px; }
+    .footer-links { justify-content: center; flex-wrap: wrap; gap: 16px; }
+  }
+
+  /* ==============================
+     RESPONSIVE — MOBILE (≤ 600px)
+  ============================== */
+  @media (max-width: 600px) {
+    /* Cursor off on touch */
+    #cursor { display: none; }
+    body { cursor: auto; }
+    a, button, .faq-item, .revenue-card, .btn-primary, .btn-ghost,
+    .cta-btn-main, .cta-btn-wa, .nav-cta { cursor: pointer; }
+
+    /* Nav */
+    nav { padding: 16px 20px; }
+    nav.scrolled { padding: 12px 20px; }
+    .nav-logo-text { font-size: 11.5px; }
+    .nav-cta { padding: 8px 16px; font-size: 10.5px; }
+
+    /* Hero */
+    .hero-left { padding: 0 20px 60px; }
+    .hero-label { font-size: 9.5px; letter-spacing: .18em; }
+    .hero-headline { font-size: clamp(34px, 9vw, 48px); margin-bottom: 20px; }
+    .hero-sub { font-size: 14px; margin-bottom: 36px; max-width: 100%; }
+    .hero-actions { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .btn-primary { padding: 13px 28px; font-size: 11.5px; width: 100%; text-align: center; }
+    .btn-ghost { font-size: 11px; }
+    .hero-badge { display: none; }
+
+    /* Manifesto */
+    .manifesto-visual { height: 280px; }
+    .manifesto-content { padding: 44px 20px 56px; }
+    .manifesto-headline { font-size: clamp(24px, 7vw, 32px); margin-bottom: 20px; }
+    .manifesto-body { font-size: 14.5px; margin-bottom: 28px; }
+    .manifesto-tagline { font-size: 17px; }
+    .manifesto-quote-mark { font-size: 64px; margin-bottom: -10px; }
+
+    /* Impact */
+    #impact { padding: 72px 0 56px; }
+    .impact-inner { padding: 0 20px; }
+    .impact-header { margin-bottom: 44px; }
+    .impact-title { font-size: clamp(28px, 8vw, 36px); }
+    .impact-desc { font-size: 13.5px; }
+    .impact-stats { grid-template-columns: 1fr 1fr; }
+    .stat-item { padding: 24px 16px; }
+    .stat-number { font-size: clamp(36px, 9vw, 52px); }
+    .stat-label { font-size: 9.5px; letter-spacing: .14em; }
+    .impact-quote { padding: 36px 20px; margin-top: 36px; }
+    .impact-quote-text { font-size: clamp(16px, 4.5vw, 22px); }
+    .impact-quote::before { font-size: 120px; top: -16px; }
+
+    /* How */
+    #how { padding: 72px 20px; }
+    .how-header { margin-bottom: 48px; }
+    .how-title { font-size: clamp(26px, 7.5vw, 34px); }
+    .how-subtitle { font-size: 14px; }
+    .how-steps { grid-template-columns: 1fr; gap: 32px; }
+    .step-number { width: 60px; height: 60px; margin-bottom: 16px; }
+    .step-icon { font-size: 22px; }
+    .step-title { font-size: 16px; }
+    .step-desc { font-size: 13px; }
+
+    /* Community */
+    .community-content { padding: 56px 20px 48px; }
+    .community-title { font-size: clamp(26px, 7.5vw, 36px); }
+    .community-body { font-size: 14.5px; margin-bottom: 36px; }
+    .community-visual { height: 300px; }
+    .value-text-title { font-size: 13.5px; }
+    .value-text-desc { font-size: 12.5px; }
+    .value-row { padding: 18px 0; gap: 14px; }
+    .value-icon { width: 36px; height: 36px; font-size: 16px; }
+
+    /* Revenue */
+    #revenue { padding: 72px 20px; }
+    .revenue-title { font-size: clamp(24px, 7vw, 32px); }
+    .revenue-body { font-size: 14px; }
+    .revenue-note { font-size: 13px; padding: 16px 18px; }
+    .revenue-card { padding: 22px 20px; }
+    .revenue-card-title { font-size: 13px; }
+    .revenue-card-desc { font-size: 12.5px; }
+
+    /* Gallery */
+    #gallery { padding-top: 60px; }
+    .gallery-header { padding: 0 20px; margin-bottom: 28px; flex-direction: column; gap: 12px; align-items: flex-start; }
+    .gallery-title { font-size: clamp(24px, 7vw, 32px); }
+    .gallery-note { text-align: left; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; gap: 3px; }
+    .gallery-item { height: 160px; }
+    .gallery-item.tall { height: 160px; }
+    .gallery-item-label { font-size: 8.5px; bottom: 12px; left: 12px; }
+
+    /* Trust */
+    #trust { padding: 72px 20px; }
+    .trust-title { font-size: clamp(24px, 7.5vw, 34px); }
+    .trust-body { font-size: 14px; }
+    .trust-badges { gap: 8px; }
+    .trust-badge { font-size: 10px; padding: 7px 12px; }
+    .faq-q-text { font-size: 14px; }
+    .faq-a { font-size: 13px; }
+    .faq-item { padding: 22px 0; }
+
+    /* CTA */
+    #cta { padding: 80px 20px; min-height: auto; }
+    .cta-title { font-size: clamp(30px, 9vw, 48px); }
+    .cta-body { font-size: 14.5px; margin-bottom: 44px; }
+    .cta-actions { flex-direction: column; align-items: center; gap: 16px; }
+    .cta-btn-main { padding: 15px 36px; font-size: 11.5px; }
+    .cta-contact-info { margin-top: 52px; gap: 20px; }
+    .contact-item-value { font-size: 13px; }
+    .cta-bg-circle { display: none; }
+
+    /* Footer */
+    footer { padding: 28px 20px; gap: 14px; }
+    .footer-brand { font-size: 12.5px; }
+    .footer-links { gap: 12px; }
+    .footer-links a { font-size: 10px; }
+
+    /* Section labels */
+    .section-label { font-size: 9px; letter-spacing: .2em; }
   }
 </style>
 </head>
@@ -1678,7 +1849,7 @@
       untuk menjadi bagian dari solusi. Mulai memilah, setor, dan rasakan perbedaannya.
     </p>
     <div class="cta-actions reveal d3">
-      <a href="https://wa.me/628" class="cta-btn-main">Hubungi Pengurus</a>
+      <a href="https://wa.me/6283829135111" class="cta-btn-main">Hubungi Pengurus</a>
       <a href="https://instagram.com/banksampahberkah_pkr" class="cta-btn-wa">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="2" y="2" width="20" height="20" rx="5"/>
@@ -1699,7 +1870,7 @@
       </div>
       <div class="contact-item">
         <div class="contact-item-label">Telepon / WhatsApp</div>
-        <div class="contact-item-value"><a href="tel:+628">08....</a></div>
+        <div class="contact-item-value"><a href="tel:+6283829135111">0838-2913-5111</a></div>
       </div>
     </div>
   </div>
