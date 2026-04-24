@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bank Sampah Berkah PKR — Ubah Sampah Jadi Rupiah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* ==============================
+     CUSTOM PROPERTIES
+  ============================== */
+  :root {
+    --green-deep: #0f2318;
+    --green-dark: #1a3a28;
+    --green-mid:  #2d5e3f;
+    --green-bright: #3d7a52;
+    --green-light: #6aad82;
+    --gold:       #b8935a;
+    --gold-light: #d4ac72;
+    --ivory:      #f2ece0;
+    --ivory-warm: #ede5d4;
+    --charcoal:   #1e1e1e;
+    --text:       #2a2820;
+    --text-muted: #6b6558;
+    --white:      #ffffff;
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-sans:  'DM Sans', sans-serif;
+    --font-mono:  'DM Mono', monospace;
+  }
+
+  /* ==============================
+     RESET & BASE
+  ============================== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ivory);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    cursor: none;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+
+  /* ==============================
+     GRAIN OVERLAY (CINEMATIC)
+  ============================== */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: .028;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+
+  /* ==============================
+     CUSTOM CURSOR
+  ============================== */
+  #cursor {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--green-mid);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-50%,-50%);
+    transition: transform .1s, background .3s, width .3s, height .3s;
+    mix-blend-mode: multiply;
+  }
+  #cursor.expanded {
+    width: 36px; height: 36px;
+    background: transparent;
+    border: 1.5px solid var(--green-mid);
+  }
+
+  /* ==============================
+     SCROLL REVEAL
+  ============================== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity .8s ease, transform .9s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: opacity .9s ease, transform 1s ease;
+  }
+  .reveal-left.visible { opacity: 1; transform: none; }
+  .reveal-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: opacity .9s ease, transform 1s ease;
+  }
+  .reveal-right.visible { opacity: 1; transform: none; }
+
+  /* delay helpers */
+  .d1 { transition-delay: .1s; }
+  .d2 { transition-delay: .2s; }
+  .d3 { transition-delay: .35s; }
+  .d4 { transition-delay: .5s; }
+  .d5 { transition-delay: .65s; }
+
+  /* ==============================
+     NAVIGATION
+  ============================== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 24px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    mix-blend-mode: normal;
+    transition: background .4s, padding .4s;
+  }
+  nav.scrolled {
+    background: rgba(15,35,24,.88);
+    backdrop-filter: blur(12px);
+    padding: 16px 48px;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .nav-logo-mark {
+    width: 36px; height: 36px;
+    background: var(--green-mid);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .nav-logo-mark svg { width: 20px; height: 20px; fill: white; }
+  .nav-logo-text {
+    font-family: var(--font-serif);
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    letter-spacing: .08em;
+    line-height: 1.2;
+  }
+  .nav-logo-text span { display: block; font-size: 10px; font-weight: 400; opacity: .7; font-family: var(--font-mono); }
+  .nav-links {
+    display: flex; gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,.75);
+    font-size: 12.5px;
+    font-family: var(--font-mono);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    transition: color .3s;
+  }
+  .nav-links a:hover { color: var(--gold-light); }
+  .nav-cta {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,.35);
+    color: white;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 9px 22px;
+    border-radius: 2px;
+    cursor: none;
+    transition: background .3s, border-color .3s;
+  }
+  .nav-cta:hover { background: var(--green-mid); border-color: var(--green-mid); }
+
+  /* ==============================
+     §1  HERO CINEMATIC
+  ============================== */
+  #hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 700px;
+    overflow: hidden;
+    background: var(--green-deep);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .hero-left {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 56px 80px 72px;
+  }
+  .hero-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-label::before {
+    content: '';
+    width: 32px; height: 1px;
+    background: var(--gold-light);
+    display: inline-block;
+  }
+  .hero-headline {
+    font-family: var(--font-serif);
+    font-size: clamp(44px, 5.5vw, 80px);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.04;
+    margin-bottom: 32px;
+  }
+  .hero-headline em {
+    font-style: italic;
+    color: var(--green-light);
+  }
+  .hero-sub {
+    font-size: 15px;
+    color: rgba(255,255,255,.62);
+    line-height: 1.75;
+    max-width: 380px;
+    margin-bottom: 48px;
+  }
+  .hero-actions {
+    display: flex; align-items: center; gap: 28px;
+  }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--green-deep);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    border-radius: 2px;
+    cursor: none;
+    transition: background .3s, transform .3s;
+    font-weight: 500;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .btn-ghost {
+    color: rgba(255,255,255,.7);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+    cursor: none;
+    transition: color .3s;
+  }
+  .btn-ghost:hover { color: var(--gold-light); }
+  .btn-ghost::after {
+    content: '↓';
+    transition: transform .3s;
+  }
+  .btn-ghost:hover::after { transform: translateY(4px); }
+
+  /* hero vertical text */
+  .hero-vertical {
+    position: absolute;
+    left: 28px;
+    bottom: 80px;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .25em;
+    color: rgba(255,255,255,.28);
+    text-transform: uppercase;
+  }
+
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, var(--green-deep) 0%, transparent 35%);
+    z-index: 2;
+  }
+  .hero-right::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, var(--green-deep) 0%, transparent 40%);
+    z-index: 2;
+  }
+  /* IMAGE PLACEHOLDER: HERO */
+  .hero-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transform: scale(1.06);
+    transition: transform 8s ease;
+    filter: brightness(.75) saturate(.8);
+  }
+  #hero:hover .hero-img { transform: scale(1.02); }
+
+  /* floating badge */
+  .hero-badge {
+    position: absolute;
+    right: 52px;
+    bottom: 80px;
+    z-index: 10;
+    background: rgba(15,35,24,.8);
+    border: 1px solid rgba(184,147,90,.3);
+    backdrop-filter: blur(12px);
+    padding: 18px 22px;
+    text-align: right;
+    border-radius: 3px;
+  }
+  .hero-badge-num {
+    font-family: var(--font-serif);
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--gold-light);
+    line-height: 1;
+  }
+  .hero-badge-label {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: .18em;
+    color: rgba(255,255,255,.55);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* scroll indicator */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .scroll-indicator-line {
+    width: 1px; height: 48px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,.4));
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%,100% { opacity:.3; transform: scaleY(1); }
+    50% { opacity:1; transform: scaleY(1.2); }
+  }
+
+  /* ==============================
+     SHARED SECTION UTILITIES
+  ============================== */
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: var(--green-mid);
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 20px;
+  }
+  .section-label::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--green-mid);
+    display: inline-block;
+  }
+  .divider {
+    width: 48px; height: 2px;
+    background: var(--gold);
+    margin-bottom: 28px;
+  }
+
+  /* ==============================
+     §2  BRAND MANIFESTO
+  ============================== */
+  #manifesto {
+    background: var(--green-dark);
+    display: grid;
+    grid-template-columns: 38% 1fr;
+    min-height: 80vh;
+    overflow: hidden;
+  }
+  .manifesto-visual {
+    position: relative;
+    overflow: hidden;
+  }
+  /* IMAGE PLACEHOLDER: MANIFESTO */
+  .manifesto-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    filter: brightness(.55) saturate(.6);
+    transition: transform .7s ease;
+  }
+  .manifesto-img:hover { transform: scale(1.04); }
+  .manifesto-visual-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, transparent 60%, var(--green-dark) 100%);
+    pointer-events: none;
+  }
+  .manifesto-content {
+    padding: 100px 80px 100px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .manifesto-quote-mark {
+    font-family: var(--font-serif);
+    font-size: 120px;
+    color: rgba(106,173,130,.12);
+    line-height: .8;
+    margin-bottom: -20px;
+    user-select: none;
+  }
+  .manifesto-headline {
+    font-family: var(--font-serif);
+    font-size: clamp(30px, 3.2vw, 46px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.18;
+    margin-bottom: 32px;
+  }
+  .manifesto-headline em { font-style: italic; color: var(--green-light); }
+  .manifesto-body {
+    font-size: 15.5px;
+    line-height: 1.85;
+    color: rgba(255,255,255,.65);
+    max-width: 480px;
+    margin-bottom: 44px;
+  }
+  .manifesto-tagline {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-style: italic;
+    color: var(--gold-light);
+    border-left: 2px solid var(--gold);
+    padding-left: 20px;
+    line-height: 1.5;
+    max-width: 360px;
+  }
+
+  /* ==============================
+     §3  IMPACT STATEMENT
+  ============================== */
+  #impact {
+    background: var(--ivory);
+    padding: 140px 0 120px;
+    position: relative;
+    overflow: hidden;
+  }
+  .impact-bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-family: var(--font-serif);
+    font-size: 22vw;
+    font-weight: 900;
+    color: rgba(45,94,63,.04);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -.04em;
+  }
+  .impact-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 72px;
+    position: relative;
+    z-index: 1;
+  }
+  .impact-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 100px;
+  }
+  .impact-title {
+    font-family: var(--font-serif);
+    font-size: clamp(36px, 4vw, 58px);
+    font-weight: 900;
+    color: var(--green-dark);
+    line-height: 1.08;
+    max-width: 520px;
+  }
+  .impact-title em { font-style: italic; color: var(--green-mid); }
+  .impact-desc {
+    max-width: 300px;
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: var(--text-muted);
+    text-align: right;
+  }
+  .impact-stats {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 0;
+  }
+  .stat-item {
+    padding: 48px 40px;
+    border-left: 1px solid rgba(45,94,63,.12);
+    position: relative;
+  }
+  .stat-item:last-child { border-right: 1px solid rgba(45,94,63,.12); }
+  .stat-number {
+    font-family: var(--font-serif);
+    font-size: clamp(48px, 5vw, 72px);
+    font-weight: 900;
+    color: var(--green-dark);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .stat-number sup {
+    font-size: .45em;
+    color: var(--gold);
+    vertical-align: super;
+  }
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .stat-bar {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px;
+    background: var(--green-light);
+    width: 0;
+    transition: width 1.6s ease;
+  }
+  .stat-item.visible .stat-bar { width: 60%; }
+  .stat-item:nth-child(2) .stat-bar { width: 0; }
+  .stat-item:nth-child(2).visible .stat-bar { width: 80%; }
+  .stat-item:nth-child(3) .stat-bar { width: 0; }
+  .stat-item:nth-child(3).visible .stat-bar { width: 45%; }
+  .stat-item:nth-child(4) .stat-bar { width: 0; }
+  .stat-item:nth-child(4).visible .stat-bar { width: 70%; }
+
+  /* magazine pull-quote below stats */
+  .impact-quote {
+    margin-top: 80px;
+    padding: 60px 80px;
+    background: var(--green-dark);
+    position: relative;
+    overflow: hidden;
+  }
+  .impact-quote::before {
+    content: '"';
+    font-family: var(--font-serif);
+    font-size: 200px;
+    color: rgba(255,255,255,.04);
+    position: absolute;
+    top: -30px; left: 40px;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .impact-quote-text {
+    font-family: var(--font-serif);
+    font-size: clamp(20px, 2.4vw, 32px);
+    font-style: italic;
+    color: var(--white);
+    line-height: 1.5;
+    max-width: 720px;
+    position: relative;
+    z-index: 1;
+  }
+  .impact-quote-attr {
+    margin-top: 20px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .2em;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ==============================
+     §4  HOW IT WORKS
+  ============================== */
+  #how {
+    background: var(--ivory-warm);
+    padding: 140px 72px;
+    position: relative;
+    overflow: hidden;
+  }
+  .how-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .how-header {
+    margin-bottom: 80px;
+    max-width: 560px;
+  }
+  .how-title {
+    font-family: var(--font-serif);
+    font-size: clamp(34px, 3.6vw, 52px);
+    font-weight: 900;
+    color: var(--green-dark);
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .how-title em { font-style: italic; color: var(--green-mid); }
+  .how-subtitle {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text-muted);
+    max-width: 420px;
+  }
+  /* stepped layout */
+  .how-steps {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    position: relative;
+  }
+  /* connector line */
+  .how-steps::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 8%;
+    right: 8%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--green-light) 20%, var(--green-light) 80%, transparent);
+    z-index: 0;
+  }
+  .step-item {
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .step-item:nth-child(2) { margin-top: 60px; }
+  .step-item:nth-child(3) { margin-top: 0; }
+  .step-item:nth-child(4) { margin-top: 60px; }
+  .step-item:nth-child(5) { margin-top: 0; }
+  .step-number {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: var(--green-dark);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 28px;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(26,58,40,.2);
+    transition: transform .4s ease;
+  }
+  .step-item:hover .step-number { transform: scale(1.1); }
+  .step-number::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1px solid rgba(106,173,130,.3);
+  }
+  .step-icon { font-size: 28px; }
+  .step-num-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .step-title {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--green-dark);
+    margin-bottom: 10px;
+    line-height: 1.25;
+  }
+  .step-desc {
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: var(--text-muted);
+  }
+
+  /* ==============================
+     §5  COMMUNITY VALUE
+  ============================== */
+  #community {
+    background: var(--white);
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 45%;
+    min-height: 85vh;
+    overflow: hidden;
+  }
+  .community-content {
+    padding: 120px 80px 120px 72px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .community-title {
+    font-family: var(--font-serif);
+    font-size: clamp(32px, 3.8vw, 54px);
+    font-weight: 900;
+    color: var(--green-dark);
+    line-height: 1.1;
+    margin-bottom: 28px;
+  }
+  .community-title em { font-style: italic; color: var(--green-mid); }
+  .community-body {
+    font-size: 15.5px;
+    line-height: 1.85;
+    color: var(--text-muted);
+    margin-bottom: 52px;
+    max-width: 480px;
+  }
+  .community-values {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .value-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 22px 0;
+    border-bottom: 1px solid rgba(45,94,63,.08);
+  }
+  .value-row:first-child { border-top: 1px solid rgba(45,94,63,.08); }
+  .value-icon {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: rgba(45,94,63,.07);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .value-text-title {
+    font-family: var(--font-sans);
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--green-dark);
+    margin-bottom: 4px;
+  }
+  .value-text-desc {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--text-muted);
+  }
+  .community-visual {
+    position: relative;
+    overflow: hidden;
+  }
+  /* IMAGE PLACEHOLDER: COMMUNITY */
+  .community-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(.9);
+    transition: transform .8s ease;
+  }
+  .community-visual:hover .community-img { transform: scale(1.04); }
+  .community-visual-tag {
+    position: absolute;
+    top: 48px; left: -16px;
+    background: var(--green-dark);
+    color: var(--white);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    z-index: 5;
+  }
+
+  /* ==============================
+     §6  OPERATION & REVENUE
+  ============================== */
+  #revenue {
+    background: var(--green-deep);
+    padding: 120px 72px;
+    position: relative;
+    overflow: hidden;
+  }
+  .revenue-bg {
+    position: absolute;
+    top: 0; right: 0;
+    width: 50%;
+    height: 100%;
+    background: radial-gradient(ellipse at 80% 50%, rgba(45,94,63,.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .revenue-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+  .revenue-left .section-label { color: var(--gold-light); }
+  .revenue-left .section-label::before { background: var(--gold-light); }
+  .revenue-title {
+    font-family: var(--font-serif);
+    font-size: clamp(30px, 3.2vw, 46px);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.12;
+    margin-bottom: 24px;
+  }
+  .revenue-title em { font-style: italic; color: var(--gold-light); }
+  .revenue-body {
+    font-size: 15px;
+    line-height: 1.85;
+    color: rgba(255,255,255,.6);
+    margin-bottom: 44px;
+  }
+  .revenue-note {
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(184,147,90,.2);
+    border-left: 3px solid var(--gold);
+    padding: 20px 24px;
+    font-size: 14px;
+    color: rgba(255,255,255,.7);
+    line-height: 1.7;
+    border-radius: 0 2px 2px 0;
+  }
+  .revenue-right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .revenue-card {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    padding: 28px 32px;
+    border-radius: 3px;
+    transition: background .3s, border-color .3s, transform .3s;
+    cursor: none;
+  }
+  .revenue-card:hover {
+    background: rgba(255,255,255,.07);
+    border-color: rgba(184,147,90,.3);
+    transform: translateX(6px);
+  }
+  .revenue-card-title {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+    letter-spacing: .04em;
+  }
+  .revenue-card-desc {
+    font-size: 13.5px;
+    color: rgba(255,255,255,.5);
+    line-height: 1.65;
+  }
+
+  /* ==============================
+     §7  GALLERY / ACTIVITY
+  ============================== */
+  #gallery {
+    background: var(--charcoal);
+    padding: 120px 0 0;
+    overflow: hidden;
+  }
+  .gallery-header {
+    padding: 0 72px;
+    margin-bottom: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .gallery-title {
+    font-family: var(--font-serif);
+    font-size: clamp(30px, 3.2vw, 46px);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.1;
+    max-width: 480px;
+  }
+  .gallery-title em { font-style: italic; color: var(--green-light); }
+  .gallery-note {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255,255,255,.4);
+    letter-spacing: .15em;
+    text-align: right;
+    max-width: 220px;
+    line-height: 1.7;
+  }
+  /* asymmetric masonry-style grid */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+    grid-template-rows: 320px 260px;
+    gap: 4px;
+  }
+  .gallery-item {
+    overflow: hidden;
+    position: relative;
+  }
+  .gallery-item.tall { grid-row: span 2; }
+  .gallery-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform .8s ease, filter .4s;
+    filter: brightness(.75) saturate(.7);
+  }
+  .gallery-item:hover img {
+    transform: scale(1.06);
+    filter: brightness(.9) saturate(.9);
+  }
+  .gallery-item-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(15,35,24,.7) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .gallery-item-label {
+    position: absolute;
+    bottom: 20px; left: 20px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .18em;
+    color: rgba(255,255,255,.6);
+    text-transform: uppercase;
+  }
+
+  /* ==============================
+     §8  FAQ / TRUST
+  ============================== */
+  #trust {
+    background: var(--ivory);
+    padding: 140px 72px;
+  }
+  .trust-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 42% 1fr;
+    gap: 100px;
+    align-items: start;
+  }
+  .trust-left .section-label { color: var(--green-mid); }
+  .trust-title {
+    font-family: var(--font-serif);
+    font-size: clamp(30px, 3.2vw, 46px);
+    font-weight: 900;
+    color: var(--green-dark);
+    line-height: 1.12;
+    margin-bottom: 24px;
+  }
+  .trust-title em { font-style: italic; }
+  .trust-body {
+    font-size: 15px;
+    line-height: 1.85;
+    color: var(--text-muted);
+    margin-bottom: 44px;
+  }
+  .trust-badges {
+    display: flex; flex-wrap: wrap; gap: 12px;
+  }
+  .trust-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(45,94,63,.08);
+    border: 1px solid rgba(45,94,63,.15);
+    padding: 9px 16px;
+    border-radius: 100px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .1em;
+    color: var(--green-dark);
+  }
+  .trust-right {
+    padding-top: 12px;
+  }
+  .faq-item {
+    border-bottom: 1px solid rgba(45,94,63,.12);
+    padding: 28px 0;
+    cursor: none;
+    overflow: hidden;
+  }
+  .faq-item:first-child { border-top: 1px solid rgba(45,94,63,.12); }
+  .faq-q {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+  }
+  .faq-q-text {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--green-dark);
+    line-height: 1.4;
+  }
+  .faq-toggle {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--green-mid);
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-size: 14px;
+    flex-shrink: 0;
+    transition: transform .35s, background .3s;
+  }
+  .faq-item.open .faq-toggle {
+    transform: rotate(45deg);
+    background: var(--gold);
+  }
+  .faq-a {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text-muted);
+    margin-top: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .45s ease, margin-top .3s;
+  }
+  .faq-item.open .faq-a {
+    max-height: 200px;
+    margin-top: 14px;
+  }
+
+  /* ==============================
+     §9  FINAL CTA
+  ============================== */
+  #cta {
+    background: var(--green-dark);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 120px 72px;
+  }
+  .cta-bg-circle {
+    position: absolute;
+    width: 800px; height: 800px;
+    border-radius: 50%;
+    border: 1px solid rgba(106,173,130,.07);
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+  .cta-bg-circle:nth-child(2) { width: 550px; height: 550px; border-color: rgba(106,173,130,.1); }
+  .cta-bg-circle:nth-child(3) { width: 300px; height: 300px; border-color: rgba(106,173,130,.15); }
+  .cta-inner {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 680px;
+  }
+  .cta-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .cta-label::before, .cta-label::after {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--gold-light);
+    display: inline-block;
+  }
+  .cta-title {
+    font-family: var(--font-serif);
+    font-size: clamp(38px, 5vw, 70px);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.06;
+    margin-bottom: 24px;
+  }
+  .cta-title em { font-style: italic; color: var(--green-light); }
+  .cta-body {
+    font-size: 15.5px;
+    line-height: 1.85;
+    color: rgba(255,255,255,.6);
+    margin-bottom: 60px;
+  }
+  .cta-actions {
+    display: flex; align-items: center; justify-content: center; gap: 20px;
+    flex-wrap: wrap;
+  }
+  .cta-btn-main {
+    background: var(--gold);
+    color: var(--green-deep);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    padding: 16px 40px;
+    border-radius: 2px;
+    cursor: none;
+    font-weight: 500;
+    transition: background .3s, transform .3s;
+  }
+  .cta-btn-main:hover { background: var(--gold-light); transform: translateY(-3px); }
+  .cta-btn-wa {
+    display: flex; align-items: center; gap: 10px;
+    color: rgba(255,255,255,.7);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    cursor: none;
+    transition: color .3s;
+  }
+  .cta-btn-wa:hover { color: var(--green-light); }
+  .cta-contact-info {
+    margin-top: 80px;
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+  .contact-item {
+    text-align: center;
+  }
+  .contact-item-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.3);
+    margin-bottom: 6px;
+  }
+  .contact-item-value {
+    font-size: 14px;
+    color: rgba(255,255,255,.7);
+  }
+  .contact-item-value a:hover { color: var(--gold-light); }
+
+  /* ==============================
+     FOOTER
+  ============================== */
+  footer {
+    background: var(--green-deep);
+    border-top: 1px solid rgba(255,255,255,.06);
+    padding: 40px 72px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .footer-brand {
+    font-family: var(--font-serif);
+    font-size: 14px;
+    color: rgba(255,255,255,.5);
+    letter-spacing: .04em;
+  }
+  .footer-brand strong { color: rgba(255,255,255,.8); }
+  .footer-links {
+    display: flex; gap: 28px; list-style: none;
+  }
+  .footer-links a {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.35);
+    transition: color .3s;
+  }
+  .footer-links a:hover { color: var(--gold-light); }
+  .footer-copy {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: rgba(255,255,255,.22);
+    letter-spacing: .1em;
+  }
+
+  /* ==============================
+     RESPONSIVE (BASIC)
+  ============================== */
+  @media (max-width: 1024px) {
+    nav { padding: 20px 32px; }
+    nav.scrolled { padding: 14px 32px; }
+    .nav-links { display: none; }
+    #hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left { padding: 0 40px 72px; justify-content: flex-end; min-height: 100vh; }
+    #manifesto { grid-template-columns: 1fr; }
+    .manifesto-visual { height: 400px; }
+    .manifesto-content { padding: 64px 40px; }
+    .impact-header { flex-direction: column; gap: 20px; }
+    .impact-desc { text-align: left; }
+    .impact-stats { grid-template-columns: repeat(2,1fr); }
+    .how-steps { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .how-steps::before { display: none; }
+    .step-item:nth-child(even) { margin-top: 0; }
+    #community { grid-template-columns: 1fr; }
+    .community-visual { height: 480px; }
+    .revenue-inner { grid-template-columns: 1fr; gap: 48px; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .gallery-item.tall { grid-row: span 1; height: 300px; }
+    .gallery-item { height: 240px; }
+    .trust-inner { grid-template-columns: 1fr; gap: 48px; }
+    footer { flex-direction: column; text-align: center; }
+    .footer-links { justify-content: center; }
+    .cta-contact-info { gap: 28px; }
+    #impact { padding: 100px 0 80px; }
+    .impact-inner { padding: 0 40px; }
+    #how { padding: 100px 40px; }
+    #trust { padding: 100px 40px; }
+    #gallery { padding-top: 80px; }
+    .gallery-header { padding: 0 40px; }
+    #revenue { padding: 100px 40px; }
+    footer { padding: 32px 40px; }
+    #cta { padding: 100px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">
+    <div class="nav-logo-mark">
+      <!-- Recycling icon SVG -->
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L9.5 6.5H4.5L7 11H2L4.5 15.5H19.5L22 11H17L19.5 6.5H14.5L12 2ZM9 14L6.5 18.5L12 22L17.5 18.5L15 14H9Z" opacity=".9"/>
+      </svg>
+    </div>
+    <div class="nav-logo-text">
+      Bank Sampah Berkah
+      <span>PKR · Sedati, Sidoarjo</span>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#manifesto">Tentang</a></li>
+    <li><a href="#how">Cara Kerja</a></li>
+    <li><a href="#community">Manfaat</a></li>
+    <li><a href="#gallery">Aktivitas</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Bergabung</a>
+</nav>
+
+<!-- §1 HERO -->
+<section id="hero">
+  <div class="hero-vertical">Permata Kwangsan Residence · Sedati · Sidoarjo</div>
+  <div class="hero-left">
+    <div class="hero-label reveal d1">Program Lingkungan Berbasis Warga</div>
+    <h1 class="hero-headline reveal d2">
+      Sampah<br>
+      yang <em>Terkelola</em><br>
+      Nilai yang<br>Nyata
+    </h1>
+    <p class="hero-sub reveal d3">
+      Bank Sampah Berkah PKR hadir untuk mengubah kebiasaan kecil menjadi dampak besar —
+      bagi lingkungan, bagi warga, dan bagi komunitas kita bersama.
+    </p>
+    <div class="hero-actions reveal d4">
+      <a href="#cta" class="btn-primary">Mulai Memilah</a>
+      <a href="#how" class="btn-ghost">Pelajari cara kerjanya</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <!-- IMAGE PLACEHOLDER: HERO — Foto aktivitas warga memilah sampah atau suasana komunitas -->
+    <img
+      class="hero-img"
+      src="utama.png"
+      alt="Aktivitas komunitas bank sampah — warga memilah sampah bersama"
+    />
+    <div class="hero-badge reveal d5">
+      <div class="hero-badge-num">2022</div>
+      <div class="hero-badge-label">Berdiri sejak</div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <div class="scroll-indicator-line"></div>
+  </div>
+</section>
+
+<!-- §2 BRAND MANIFESTO -->
+<section id="manifesto">
+  <div class="manifesto-visual">
+    <!-- IMAGE PLACEHOLDER: MANIFESTO — Foto close-up tangan memilah sampah atau suasana alam hijau -->
+    <img
+      class="manifesto-img"
+      src="1.png"
+      alt="Pemilahan sampah — kebiasaan kecil yang berdampak besar"
+    />
+    <div class="manifesto-visual-overlay"></div>
+  </div>
+  <div class="manifesto-content">
+    <div class="manifesto-quote-mark reveal">&ldquo;</div>
+    <div class="section-label reveal">Manifesto Kami</div>
+    <h2 class="manifesto-headline reveal d1">
+      Satu kebiasaan kecil<br>
+      dari setiap rumah —<br>
+      <em>mengubah segalanya.</em>
+    </h2>
+    <p class="manifesto-body reveal d2">
+      Bank Sampah Berkah PKR bukan sekadar tempat setoran sampah. Kami adalah gerakan perubahan
+      yang dimulai dari dapur dan halaman rumah warga. Dengan memilah sampah sejak dari sumbernya,
+      setiap keluarga di Permata Kwangsan Residence turut berkontribusi pada lingkungan yang lebih
+      bersih, lebih sehat, dan lebih lestari.
+    </p>
+    <p class="manifesto-body reveal d2" style="margin-top: -24px;">
+      Sampah terpilah dikumpulkan, disetor ke bank sampah, lalu diteruskan ke pengepul.
+      Dari rantai sederhana ini lahir nilai nyata — bagi lingkungan dan bagi setiap orang yang ikut bergerak.
+    </p>
+    <div class="manifesto-tagline reveal d3">
+      "Ubah Sampah Jadi Rupiah —<br>dan bumi yang lebih baik untuk generasi berikutnya."
+    </div>
+  </div>
+</section>
+
+<!-- §3 IMPACT STATEMENT -->
+<section id="impact">
+  <div class="impact-bg-text">BERKAH</div>
+  <div class="impact-inner">
+    <div class="impact-header">
+      <h2 class="impact-title reveal-left">
+        Angka-angka yang<br>
+        <em>berbicara</em> sendiri.
+      </h2>
+      <p class="impact-desc reveal-right">
+        Setiap kilogram sampah yang dipilah adalah bukti nyata kepedulian warga
+        terhadap lingkungan dan komunitas mereka.
+      </p>
+    </div>
+    <div class="impact-stats">
+      <div class="stat-item reveal d1">
+        <div class="stat-number">200<sup>+</sup></div>
+        <div class="stat-label">Warga &amp;<br>Kepala Keluarga<br>Aktif</div>
+        <div class="stat-bar"></div>
+      </div>
+      <div class="stat-item reveal d2">
+        <div class="stat-number">1.5<sup>T</sup></div>
+        <div class="stat-label">Ton Sampah<br>Terpilah<br>per Bulan</div>
+        <div class="stat-bar"></div>
+      </div>
+      <div class="stat-item reveal d3">
+        <div class="stat-number">8<sup>+</sup></div>
+        <div class="stat-label">Jenis Sampah<br>Terpilah<br>Diterima</div>
+        <div class="stat-bar"></div>
+      </div>
+      <div class="stat-item reveal d4">
+        <div class="stat-number">100<sup>%</sup></div>
+        <div class="stat-label">Setoran<br>ke Pengepul<br>Terjamin</div>
+        <div class="stat-bar"></div>
+      </div>
+    </div>
+    <div class="impact-quote reveal">
+      <p class="impact-quote-text">
+        "Lingkungan yang bersih bukan hadiah — ia adalah hasil dari keputusan
+        kecil yang dibuat setiap hari oleh warga yang peduli."
+      </p>
+      <div class="impact-quote-attr">— Bank Sampah Berkah PKR &nbsp;·&nbsp; Permata Kwangsan Residence</div>
+    </div>
+  </div>
+</section>
+
+<!-- §4 HOW IT WORKS -->
+<section id="how">
+  <div class="how-inner">
+    <div class="how-header">
+      <div class="section-label reveal">Alur Program</div>
+      <h2 class="how-title reveal d1">Sederhana.<br><em>Bermakna.</em> Berulang.</h2>
+      <p class="how-subtitle reveal d2">
+        Lima langkah yang mengubah sampah rumah tangga menjadi manfaat nyata — bagi bumi dan bagi dompet.
+      </p>
+    </div>
+    <div class="how-steps">
+      <div class="step-item reveal d1">
+        <div class="step-number"><span class="step-icon">🏠</span></div>
+        <div class="step-num-label">Langkah 01</div>
+        <div class="step-title">Pilah dari Rumah</div>
+        <div class="step-desc">Pisahkan sampah organik, anorganik, dan plastik sebelum dibuang. Mulai dari dapur, mudah dan cepat.</div>
+      </div>
+      <div class="step-item reveal d2">
+        <div class="step-number"><span class="step-icon">🛍️</span></div>
+        <div class="step-num-label">Langkah 02</div>
+        <div class="step-title">Kumpulkan &amp; Simpan</div>
+        <div class="step-desc">Simpan sampah terpilah di rumah hingga jadwal pengumpulan tiba. Jangan campur kembali.</div>
+      </div>
+      <div class="step-item reveal d3">
+        <div class="step-number"><span class="step-icon">🏦</span></div>
+        <div class="step-num-label">Langkah 03</div>
+        <div class="step-title">Setor ke Bank Sampah</div>
+        <div class="step-desc">Bawa atau titipkan sampah terpilah ke Bank Sampah Berkah PKR. Tercatat, terorganisir.</div>
+      </div>
+      <div class="step-item reveal d4">
+        <div class="step-number"><span class="step-icon">♻️</span></div>
+        <div class="step-num-label">Langkah 04</div>
+        <div class="step-title">Diteruskan ke Pengepul</div>
+        <div class="step-desc">Sampah terpilah dikumpulkan dan disetor ke pengepul resmi. Nilai material terselamatkan.</div>
+      </div>
+      <div class="step-item reveal d5">
+        <div class="step-number"><span class="step-icon">🌿</span></div>
+        <div class="step-num-label">Langkah 05</div>
+        <div class="step-title">Manfaat Dirasakan</div>
+        <div class="step-desc">Lingkungan lebih bersih, warga lebih sadar, pengurus mendapatkan uang lelah yang layak.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- §5 COMMUNITY VALUE -->
+<section id="community">
+  <div class="community-content">
+    <div class="section-label reveal">Nilai Komunitas</div>
+    <h2 class="community-title reveal d1">
+      Bukan sekadar<br>
+      <em>buang sampah.</em><br>
+      Ini tentang<br>kita semua.
+    </h2>
+    <p class="community-body reveal d2">
+      Setiap warga yang ikut memilah sampah adalah bagian dari solusi nyata.
+      Bank Sampah Berkah PKR bukan hanya fasilitas — ia adalah jembatan antara kebiasaan
+      sehari-hari dan masa depan lingkungan yang lebih baik.
+    </p>
+    <div class="community-values">
+      <div class="value-row reveal d2">
+        <div class="value-icon">🌱</div>
+        <div>
+          <div class="value-text-title">Edukasi Pemilahan dari Sumber</div>
+          <div class="value-text-desc">Warga belajar memilah langsung dari rumah — membangun kebiasaan yang bertahan jangka panjang.</div>
+        </div>
+      </div>
+      <div class="value-row reveal d3">
+        <div class="value-icon">🤝</div>
+        <div>
+          <div class="value-text-title">Penguatan Komunitas Perumahan</div>
+          <div class="value-text-desc">Program ini mempererat hubungan antarwarga melalui tujuan bersama yang nyata dan terukur.</div>
+        </div>
+      </div>
+      <div class="value-row reveal d4">
+        <div class="value-icon">📊</div>
+        <div>
+          <div class="value-text-title">Sistem Setoran yang Transparan</div>
+          <div class="value-text-desc">Setiap setoran tercatat dan dapat dipantau. Kepercayaan dibangun lewat sistem yang jelas.</div>
+        </div>
+      </div>
+      <div class="value-row reveal d5">
+        <div class="value-icon">💚</div>
+        <div>
+          <div class="value-text-title">Dampak Lingkungan Terukur</div>
+          <div class="value-text-desc">Setiap kilogram yang terselamatkan dari TPA adalah kontribusi nyata bagi bumi yang lebih sehat.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="community-visual">
+    <!-- IMAGE PLACEHOLDER: COMMUNITY — Foto warga perumahan bersama, kegiatan bersih-bersih atau komunitas -->
+    <img
+      class="community-img"
+      src="2.png"
+      alt="Komunitas warga Bank Sampah Berkah PKR bergotong royong"
+    />
+    <div class="community-visual-tag reveal">Komunitas Aktif</div>
+  </div>
+</section>
+
+<!-- §6 OPERATION & REVENUE -->
+<section id="revenue">
+  <div class="revenue-bg"></div>
+  <div class="revenue-inner">
+    <div class="revenue-left">
+      <div class="section-label reveal">Transparansi Operasional</div>
+      <h2 class="revenue-title reveal d1">
+        Pengurus yang<br>
+        bekerja nyata,<br>
+        <em>dihargai</em> dengan layak.
+      </h2>
+      <p class="revenue-body reveal d2">
+        Mengelola bank sampah membutuhkan waktu, tenaga, dan dedikasi. Bank Sampah Berkah PKR
+        beroperasi dengan sistem yang transparan — hasil setoran sampah terpilah ke pengepul
+        tidak hanya memberi nilai bagi lingkungan, tetapi juga menghasilkan uang lelah yang
+        wajar bagi para pengurus yang bekerja setiap hari.
+      </p>
+      <div class="revenue-note reveal d3">
+        Semakin banyak warga yang aktif memilah dan menyetorkan sampah, semakin besar volume
+        setoran ke pengepul — yang berarti semakin baik manfaat operasional yang dapat
+        dirasakan oleh seluruh tim pengurus.
+      </div>
+    </div>
+    <div class="revenue-right">
+      <div class="revenue-card reveal d1">
+        <div class="revenue-card-title">Volume Setoran → Nilai Operasional</div>
+        <div class="revenue-card-desc">Semakin banyak warga aktif menyetorkan sampah terpilah, semakin besar total volume yang dapat disetor ke pengepul dengan harga lebih kompetitif.</div>
+      </div>
+      <div class="revenue-card reveal d2">
+        <div class="revenue-card-title">Sistem Pencatatan Rapi</div>
+        <div class="revenue-card-desc">Setiap setoran warga dicatat. Transparansi adalah fondasi kepercayaan yang kami jaga sejak hari pertama.</div>
+      </div>
+      <div class="revenue-card reveal d3">
+        <div class="revenue-card-title">Pengepul Mitra Terpercaya</div>
+        <div class="revenue-card-desc">Kami bekerja sama dengan pengepul yang memiliki rekam jejak baik, memastikan sampah terpilah mendapat nilai yang semestinya.</div>
+      </div>
+      <div class="revenue-card reveal d4">
+        <div class="revenue-card-title">Keberlanjutan Program</div>
+        <div class="revenue-card-desc">Dengan model operasional yang mandiri, program ini dirancang untuk terus berjalan tanpa bergantung pada donasi atau subsidi luar.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- §7 GALLERY -->
+<section id="gallery">
+  <div class="gallery-header">
+    <h2 class="gallery-title reveal-left">
+      Gerakan yang<br>
+      <em>terlihat</em> dari dekat.
+    </h2>
+    <div class="gallery-note reveal-right">
+      Dokumentasi kegiatan<br>
+      Bank Sampah Berkah PKR<br>
+      di lapangan
+    </div>
+  </div>
+  <div class="gallery-grid">
+    <!-- IMAGE PLACEHOLDER: GALLERY 1 — Foto utama aktivitas warga memilah sampah -->
+    <div class="gallery-item tall">
+      <img src="3.png" alt="Warga aktif memilah sampah" />
+      <div class="gallery-item-overlay"></div>
+      <div class="gallery-item-label"></div>
+    </div>
+    <!-- IMAGE PLACEHOLDER: GALLERY 2 — Foto kegiatan komunitas atau gotong royong -->
+    <div class="gallery-item">
+      <img src="4.png" alt="Kegiatan komunitas bank sampah" />
+      <div class="gallery-item-overlay"></div>
+      <div class="gallery-item-label"></div>
+    </div>
+    <!-- IMAGE PLACEHOLDER: GALLERY 3 — Foto sampah terpilah rapi dalam wadah -->
+    <div class="gallery-item">
+      <img src="5.png" alt="Sampah terpilah rapi" />
+      <div class="gallery-item-overlay"></div>
+      <div class="gallery-item-label"></div>
+    </div>
+    <!-- IMAGE PLACEHOLDER: GALLERY 4 — Foto suasana hijau lingkungan perumahan -->
+    <div class="gallery-item tall">
+      <img src="6.png" alt="Lingkungan hijau dan bersih" />
+      <div class="gallery-item-overlay"></div>
+      <div class="gallery-item-label"></div>
+    </div>
+    <!-- IMAGE PLACEHOLDER: GALLERY 5 — Foto proses setoran atau penimbangan -->
+    <div class="gallery-item">
+      <img src="7.png" alt="Proses setoran sampah ke bank sampah" />
+      <div class="gallery-item-overlay"></div>
+      <div class="gallery-item-label"></div>
+    </div>
+    <!-- IMAGE PLACEHOLDER: GALLERY 6 — Foto sosialisasi atau edukasi warga -->
+    <div class="gallery-item">
+      <img src="8.png" alt="Sosialisasi edukasi warga" />
+      <div class="gallery-item-overlay"></div>
+      <div class="gallery-item-label"></div>
+    </div>
+  </div>
+</section>
+
+<!-- §8 TRUST / FAQ -->
+<section id="trust">
+  <div class="trust-inner">
+    <div class="trust-left">
+      <div class="section-label reveal">Mengapa Percaya Kami</div>
+      <h2 class="trust-title reveal d1">
+        Program yang<br>
+        berjalan dengan<br>
+        <em>sistem, bukan<br>niat semata.</em>
+      </h2>
+      <p class="trust-body reveal d2">
+        Kepercayaan warga adalah aset terpenting kami.
+        Setiap aspek operasional — dari pencatatan setoran hingga distribusi ke pengepul —
+        dijalankan dengan standar yang jelas, konsisten, dan dapat dipertanggungjawabkan.
+      </p>
+      <div class="trust-badges reveal d3">
+        <span class="trust-badge">✓ Berdiri Sejak 2022</span>
+        <span class="trust-badge">✓ Pengurus Terlatih</span>
+        <span class="trust-badge">✓ Sistem Pencatatan</span>
+        <span class="trust-badge">✓ Mitra Pengepul Resmi</span>
+        <span class="trust-badge">✓ Setoran Rutin Terjadwal</span>
+        <span class="trust-badge">✓ Komunitas Aktif</span>
+      </div>
+    </div>
+    <div class="trust-right">
+      <div class="faq-item reveal">
+        <div class="faq-q">
+          <span class="faq-q-text">Sampah apa saja yang bisa disetor ke Bank Sampah Berkah PKR?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-a">
+          Kami menerima berbagai jenis sampah anorganik terpilah seperti plastik (botol, kresek, ember),
+          kertas dan kardus, kaleng aluminium dan besi, kaca, serta elektronik bekas. Sampah harus
+          sudah dipilah dan dibersihkan sebelum disetor.
+        </div>
+      </div>
+      <div class="faq-item reveal d1">
+        <div class="faq-q">
+          <span class="faq-q-text">Kapan jadwal setoran ke Bank Sampah Berkah PKR?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-a">
+          Jadwal setoran rutin dilaksanakan setiap bulan di lingkungan Permata Kwangsan Residence.
+          Informasi jadwal terkini dapat dilihat di Instagram kami @banksampahberkah_pkr atau
+          dengan menghubungi pengurus langsung.
+        </div>
+      </div>
+      <div class="faq-item reveal d2">
+        <div class="faq-q">
+          <span class="faq-q-text">Apakah ada biaya untuk mendaftar atau menjadi anggota?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-a">
+          Tidak ada biaya pendaftaran. Program Bank Sampah Berkah PKR terbuka untuk seluruh warga
+          Permata Kwangsan Residence. Cukup hubungi pengurus dan mulai memilah sampah dari rumah Anda.
+        </div>
+      </div>
+      <div class="faq-item reveal d3">
+        <div class="faq-q">
+          <span class="faq-q-text">Bagaimana jika saya ingin menjadi mitra atau pengepul?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-a">
+          Kami terbuka untuk kerjasama dengan pengepul, sponsor program lingkungan, atau
+          lembaga yang sejalan dengan misi kami. Silakan hubungi kami melalui email
+          sampahberkahpkr@gmail.com atau telepon di 0838-2913-5111 untuk berdiskusi lebih lanjut.
+        </div>
+      </div>
+      <div class="faq-item reveal d4">
+        <div class="faq-q">
+          <span class="faq-q-text">Bagaimana cara memulai memilah sampah di rumah?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-a">
+          Mulai dengan menyiapkan dua wadah terpisah — satu untuk organik (sisa makanan, daun)
+          dan satu untuk anorganik (plastik, kertas, kaleng). Biasakan seluruh anggota keluarga
+          untuk menaruh sampah di tempat yang tepat. Sesederhana itu sudah membuat perbedaan besar.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- §9 FINAL CTA -->
+<section id="cta">
+  <div class="cta-bg-circle"></div>
+  <div class="cta-bg-circle"></div>
+  <div class="cta-bg-circle"></div>
+  <div class="cta-inner">
+    <div class="cta-label reveal">Bergabung Sekarang</div>
+    <h2 class="cta-title reveal d1">
+      Satu langkah<br>
+      dari Anda,<br>
+      <em>satu perubahan</em><br>
+      untuk kita semua.
+    </h2>
+    <p class="cta-body reveal d2">
+      Bergabunglah bersama warga Permata Kwangsan Residence yang sudah memilih
+      untuk menjadi bagian dari solusi. Mulai memilah, setor, dan rasakan perbedaannya.
+    </p>
+    <div class="cta-actions reveal d3">
+      <a href="https://wa.me/628" class="cta-btn-main">Hubungi Pengurus</a>
+      <a href="https://instagram.com/banksampahberkah_pkr" class="cta-btn-wa">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="2" width="20" height="20" rx="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+        @banksampahberkah_pkr
+      </a>
+    </div>
+    <div class="cta-contact-info reveal d4">
+      <div class="contact-item">
+        <div class="contact-item-label">Lokasi</div>
+        <div class="contact-item-value">Permata Kwangsan Residence,<br>Sedati, Sidoarjo</div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-label">Email</div>
+        <div class="contact-item-value"><a href="mailto:sampahberkahpkr@gmail.com">sampahberkahpkr@gmail.com</a></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-label">Telepon / WhatsApp</div>
+        <div class="contact-item-value"><a href="tel:+628">08....</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <strong>Bank Sampah Berkah PKR</strong> — Permata Kwangsan Residence, Sedati, Sidoarjo
+  </div>
+  <ul class="footer-links">
+    <li><a href="#manifesto">Tentang</a></li>
+    <li><a href="#how">Cara Kerja</a></li>
+    <li><a href="#community">Manfaat</a></li>
+    <li><a href="#cta">Kontak</a></li>
+  </ul>
+  <div class="footer-copy">© 2025 Bank Sampah Berkah PKR · Ubah Sampah Jadi Rupiah</div>
+</footer>
+
+<script>
+  /* ==============================
+     CURSOR
+  ============================== */
+  const cursor = document.getElementById('cursor');
+  let mx = 0, my = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top  = my + 'px';
+  });
+  document.querySelectorAll('a, button, .faq-item, .revenue-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('expanded'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('expanded'));
+  });
+
+  /* ==============================
+     SCROLL REVEAL
+  ============================== */
+  const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .stat-item');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+
+  /* ==============================
+     NAVBAR SCROLL
+  ============================== */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 80);
+  }, { passive: true });
+
+  /* ==============================
+     PARALLAX (hero)
+  ============================== */
+  const heroImg = document.querySelector('.hero-img');
+  if (heroImg) {
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      if (scrolled < window.innerHeight) {
+        heroImg.style.transform = `scale(1.06) translateY(${scrolled * 0.15}px)`;
+      }
+    }, { passive: true });
+  }
+
+  /* ==============================
+     FAQ TOGGLE
+  ============================== */
+  document.querySelectorAll('.faq-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  /* ==============================
+     COUNTER ANIMATION
+  ============================== */
+  function animateCounter(el, target, suffix) {
+    let start = 0;
+    const duration = 1800;
+    const step = timestamp => {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = (typeof target === 'float'
+        ? (target * eased).toFixed(1)
+        : Math.round(target * eased)) + (suffix || '');
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  /* ==============================
+     CTA CIRCLES ANIMATION
+  ============================== */
+  const circles = document.querySelectorAll('.cta-bg-circle');
+  let angle = 0;
+  function animateCircles() {
+    angle += 0.003;
+    circles.forEach((c, i) => {
+      const offset = i * 2.09;
+      c.style.transform = `translate(-50%,-50%) rotate(${angle + offset}rad) scale(${1 + Math.sin(angle + offset) * 0.03})`;
+    });
+    requestAnimationFrame(animateCircles);
+  }
+  animateCircles();
+</script>
+</body>
+</html>
